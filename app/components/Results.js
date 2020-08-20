@@ -6,6 +6,7 @@ import {
   FaUsers,
   FaUserFriends,
   FaUser,
+  FaCode,
 } from 'react-icons/fa'
 import { Card } from './Card'
 import Loading from './Loading'
@@ -44,6 +45,11 @@ const PlayerResult = ({ header, profile, score }) => {
         <li>
           <FaUserFriends color={'rgb(64,183,95)'} size={22} />
           {profile.following.toLocaleString()} following
+        </li>
+
+        <li>
+          <FaCode color={'rgb(62,76,82)'} size={22} />
+          {profile.public_repos.toLocaleString()} repositories
         </li>
       </ul>
     </Card>
