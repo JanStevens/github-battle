@@ -82,7 +82,7 @@ export default class Popular extends React.Component {
 
         {this.isLoading() && <p>Loading</p>}
 
-        {error && <p>{error}</p>}
+        {error && <p className={'center-text error'}>{error}</p>}
 
         {repos[selectedLanguage] && (
           <ReposGrid repos={repos[selectedLanguage]} />
@@ -112,7 +112,7 @@ function ReposGrid({ repos }) {
           i
         ) => {
           return (
-            <li key={id} className={'repo bg-light'}>
+            <li key={id} className={'card bg-light'}>
               <h4 className={'header-lg center-text'}>#{i + 1}</h4>
               <img
                 className={'avatar'}
