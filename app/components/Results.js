@@ -79,6 +79,7 @@ export default class Results extends React.Component {
 
   render() {
     const { winner, loser, error, loading } = this.state
+    const { onReset } = this.props
 
     if (loading === true) {
       return <p>LOADING</p>
@@ -89,19 +90,24 @@ export default class Results extends React.Component {
     }
 
     return (
-      <div className={'grid space-around container-sm'}>
-        <PlayerResult
-          header={winner.score === loser.score ? 'Tie' : 'Winner'}
-          score={winner.score}
-          profile={winner.profile}
-        />
+      <>
+        <div className={'grid space-around container-sm'}>
+          <PlayerResult
+            header={winner.score === loser.score ? 'Tie' : 'Winner'}
+            score={winner.score}
+            profile={winner.profile}
+          />
 
-        <PlayerResult
-          header={winner.score === loser.score ? 'Tie' : 'Loser'}
-          score={loser.score}
-          profile={loser.profile}
-        />
-      </div>
+          <PlayerResult
+            header={winner.score === loser.score ? 'Tie' : 'Loser'}
+            score={loser.score}
+            profile={loser.profile}
+          />
+        </div>
+        <button onClick={onReset} className={'btn dark-btn btn-space'}>
+          Reset
+        </button>
+      </>
     )
   }
 }

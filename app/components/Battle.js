@@ -125,17 +125,35 @@ export default class Battle extends React.Component {
     })
   }
 
-  handleReset = (id) => {
+  handleClearPlayer = (id) => {
     this.setState({
       [id]: null,
     })
+  }
+
+  handleReset = () => {
+    this.setState({
+      playerOne: null,
+      playerTwo: null,
+      battle: false,
+    })
+  }
+
+  handleBattle = () => {
+    this.setState({ battle: true })
   }
 
   render() {
     const { playerOne, playerTwo, battle } = this.state
 
     if (battle === true) {
-      return <Results playerOne={playerOne} playerTwo={playerTwo} />
+      return (
+        <Results
+          playerOne={playerOne}
+          playerTwo={playerTwo}
+          onReset={this.handleReset}
+        />
+      )
     }
 
     return (
@@ -154,7 +172,7 @@ export default class Battle extends React.Component {
               <PlayerPreview
                 username={playerOne}
                 label={'Player One'}
-                onReset={() => this.handleReset('playerOne')}
+                onReset={() => this.handleClearPlayer('playerOne')}
               />
             )}
 
@@ -167,7 +185,7 @@ export default class Battle extends React.Component {
               <PlayerPreview
                 username={playerTwo}
                 label={'Player Two'}
-                onReset={() => this.handleReset('playerTwo')}
+                onReset={() => this.handleClearPlayer('playerTwo')}
               />
             )}
           </div>
@@ -175,7 +193,7 @@ export default class Battle extends React.Component {
           {playerOne && playerTwo && (
             <button
               className={'btn dark-btn btn-space'}
-              onClick={() => this.setState({ battle: true })}
+              onClick={this.handleBattle}
             >
               Battle
             </button>
