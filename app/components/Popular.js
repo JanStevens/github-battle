@@ -10,6 +10,7 @@ import {
 } from 'react-icons/fa'
 import { emojify } from 'react-emojione'
 import { Card } from './Card'
+import Loading from './Loading'
 
 function LanguagesNav({ selected, onUpdateLanguages }) {
   const languages = ['All', 'JavaScript', 'Ruby', 'Java', 'CSS', 'Python', 'Go']
@@ -81,7 +82,7 @@ export default class Popular extends React.Component {
           onUpdateLanguages={this.updateLanguage}
         />
 
-        {this.isLoading() && <p>Loading</p>}
+        {this.isLoading() && <Loading text={'Fetcing Repos'} />}
 
         {error && <p className={'center-text error'}>{error}</p>}
 
