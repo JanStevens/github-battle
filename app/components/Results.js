@@ -7,23 +7,17 @@ import {
   FaUserFriends,
   FaUser,
 } from 'react-icons/fa'
+import { Card } from './Card'
 
 const PlayerResult = ({ header, profile, score }) => {
   return (
-    <div className={'card bg-light'}>
-      <h4 className={'header-lg center-text'}>{header}</h4>
-      <img
-        className={'avatar'}
-        src={profile.avatar_url}
-        alt={`Avatar for ${profile.login}`}
-      />
-      <h4 className={'center-text'}>Score: {score.toLocaleString()}</h4>
-      <h2 className={'center-text'}>
-        <a className={'link'} href={profile.html_url} target={'blank'}>
-          {profile.login}
-        </a>
-      </h2>
-
+    <Card
+      header={header}
+      subheader={`Score: ${score.toLocaleString()}`}
+      avatar={profile.avatar_url}
+      href={profile.html_url}
+      name={profile.login}
+    >
       <ul className={'card-list'}>
         <li>
           <FaUser color={'rgb(239,115,115)'} size={22} />
@@ -51,7 +45,7 @@ const PlayerResult = ({ header, profile, score }) => {
           {profile.following.toLocaleString()} following
         </li>
       </ul>
-    </div>
+    </Card>
   )
 }
 

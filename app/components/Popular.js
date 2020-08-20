@@ -9,6 +9,7 @@ import {
   FaExclamationTriangle,
 } from 'react-icons/fa'
 import { emojify } from 'react-emojione'
+import { Card } from './Card'
 
 function LanguagesNav({ selected, onUpdateLanguages }) {
   const languages = ['All', 'JavaScript', 'Ruby', 'Java', 'CSS', 'Python', 'Go']
@@ -94,7 +95,7 @@ export default class Popular extends React.Component {
 
 function ReposGrid({ repos }) {
   return (
-    <ul className={'grid space-around'}>
+    <div className={'grid space-around'}>
       {repos.map(
         (
           {
@@ -102,7 +103,6 @@ function ReposGrid({ repos }) {
             name,
             full_name,
             description,
-            owner,
             owner: { login, avatar_url },
             html_url,
             stargazers_count,
@@ -112,18 +112,13 @@ function ReposGrid({ repos }) {
           i
         ) => {
           return (
-            <li key={id} className={'card bg-light'}>
-              <h4 className={'header-lg center-text'}>#{i + 1}</h4>
-              <img
-                className={'avatar'}
-                src={avatar_url}
-                alt={`Avatar for ${login}`}
-              />
-              <h2 className={'text-center'}>
-                <a className={'link'} href={html_url}>
-                  {name}
-                </a>
-              </h2>
+            <Card
+              key={id}
+              header={`#${i + 1}`}
+              avatar={avatar_url}
+              name={name}
+              href={html_url}
+            >
               {description && (
                 <small>
                   {emojify(description, {
@@ -153,10 +148,10 @@ function ReposGrid({ repos }) {
                   {open_issues.toLocaleString()} open
                 </li>
               </ul>
-            </li>
+            </Card>
           )
         }
       )}
-    </ul>
+    </div>
   )
 }
