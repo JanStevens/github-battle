@@ -32,22 +32,17 @@ function LanguagesNav({ selected, onUpdateLanguages }) {
 }
 
 export default class Popular extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      selectedLanguage: 'All',
-      repos: {},
-      error: null,
-    }
-    this.updateLanguage = this.updateLanguage.bind(this)
-    this.isLoading = this.isLoading.bind(this)
+  state = {
+    selectedLanguage: 'All',
+    repos: {},
+    error: null,
   }
 
   componentDidMount() {
     this.updateLanguage(this.state.selectedLanguage)
   }
 
-  updateLanguage(selectedLanguage) {
+  updateLanguage = (selectedLanguage) => {
     this.setState({ selectedLanguage, error: null })
 
     if (!this.state.repos[selectedLanguage]) {
@@ -70,7 +65,7 @@ export default class Popular extends React.Component {
     }
   }
 
-  isLoading() {
+  isLoading = () => {
     const { selectedLanguage, error, repos } = this.state
     return !repos[selectedLanguage] && error === null
   }
@@ -105,6 +100,7 @@ function ReposGrid({ repos }) {
           {
             id,
             name,
+            full_name,
             description,
             owner,
             owner: { login, avatar_url },
@@ -125,7 +121,7 @@ function ReposGrid({ repos }) {
               />
               <h2 className={'text-center'}>
                 <a className={'link'} href={html_url}>
-                  {login}
+                  {name}
                 </a>
               </h2>
               {description && (
@@ -138,7 +134,9 @@ function ReposGrid({ repos }) {
               <ul className={'card-list'}>
                 <li>
                   <FaUser color={'rgb(255,191,116)'} size={22} />
-                  <a href={`https://github.com/${login}`}>{login}</a>
+                  <a href={`https://github.com/${login}`} target={'_blank'}>
+                    {login}
+                  </a>
                 </li>
                 <li>
                   <FaStar color={'rgb(255,215,0)'} size={22} />
