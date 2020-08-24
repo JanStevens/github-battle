@@ -1,4 +1,5 @@
 import React from 'react'
+import withHover from './withHover'
 
 const styles = {
   container: {
@@ -22,35 +23,13 @@ const styles = {
   },
 }
 
-export default class Tooltip extends React.Component {
-  state = {
-    hovering: false,
-  }
-
-  mouseOver = () => {
-    this.setState({
-      hovering: true,
-    })
-  }
-
-  mouseOut = () => {
-    this.setState({
-      hovering: false,
-    })
-  }
-
-  render() {
-    const { hovering } = this.state
-    const { text, children } = this.props
-    return (
-      <div
-        onMouseOver={this.mouseOver}
-        onMouseOut={this.mouseOut}
-        style={styles.container}
-      >
-        {hovering === true && <div style={styles.tooltip}>{text}</div>}
-        {children}
-      </div>
-    )
-  }
+const Tooltip = ({ text, children, hovering }) => {
+  return (
+    <div style={styles.container}>
+      {hovering === true && <div style={styles.tooltip}>{text}</div>}
+      {children}
+    </div>
+  )
 }
+
+export default withHover(Tooltip)
