@@ -119,6 +119,7 @@ const PlayerPreview = ({ username, onReset, label }) => {
                 href={`https://github.com/${username}`}
                 className={'link'}
                 target={'_blank'}
+                rel="noreferrer"
               >
                 {username}
               </a>

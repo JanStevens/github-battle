@@ -60,7 +60,7 @@ export default class Popular extends React.Component {
           }))
         )
         .catch(() => {
-          console.warn('Error fetching repos: ', error)
+          console.warn('Error fetching repos: ', this.state.error)
           this.setState({
             error: `There was an error fetching the repositories.`,
           })
@@ -132,8 +132,12 @@ function ReposGrid({ repos }) {
                 <li>
                   <Tooltip text={'Github username'}>
                     <FaUser color={'rgb(255,191,116)'} size={22} />
-                    <a href={`https://github.com/${login}`} target={'_blank'}>
-                      {login}
+                    <a
+                      href={`https://github.com/${login}`}
+                      target={'_blank'}
+                      rel="noreferrer"
+                    >
+                      {full_name}
                     </a>
                   </Tooltip>
                 </li>
