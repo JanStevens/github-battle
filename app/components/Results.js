@@ -11,6 +11,8 @@ import {
 import { Card } from './Card'
 import Loading from './Loading'
 import Tooltip from './Tooltip'
+import { ThemeConsumer } from '../contexts/theme'
+import classNames from 'classnames'
 
 const PlayerResult = ({ header, profile, score }) => {
   return (
@@ -102,24 +104,34 @@ export default class Results extends React.Component {
     }
 
     return (
-      <>
-        <div className={'grid space-around container-sm'}>
-          <PlayerResult
-            header={winner.score === loser.score ? 'Tie' : 'Winner'}
-            score={winner.score}
-            profile={winner.profile}
-          />
+      <ThemeConsumer>
+        {({ theme }) => (
+          <>
+            <div className={'grid space-around container-sm'}>
+              <PlayerResult
+                header={winner.score === loser.score ? 'Tie' : 'Winner'}
+                score={winner.score}
+                profile={winner.profile}
+              />
 
-          <PlayerResult
-            header={winner.score === loser.score ? 'Tie' : 'Loser'}
-            score={loser.score}
-            profile={loser.profile}
-          />
-        </div>
-        <button onClick={onReset} className={'btn dark-btn btn-space'}>
-          Reset
-        </button>
-      </>
+              <PlayerResult
+                header={winner.score === loser.score ? 'Tie' : 'Loser'}
+                score={loser.score}
+                profile={loser.profile}
+              />
+            </div>
+            <button
+              onClick={onReset}
+              className={classNames('btn', 'btn-space', {
+                'light-btn': theme === 'dark',
+                'dark-btn': theme === 'light',
+              })}
+            >
+              Reset
+            </button>
+          </>
+        )}
+      </ThemeConsumer>
     )
   }
 }

@@ -119,7 +119,12 @@ li {
 
 .bg-light {
   background: rgba(0, 0, 0, 0.08);
-  border-radius: 3px;
+  border-radius: 6px;
+}
+
+.bg-dark {
+  background: rgb(36, 40, 42);
+  border-radius: 6px;
 }
 
 .card {
@@ -199,6 +204,11 @@ li {
   background: rgba(0, 0, 0, 0.02);
 }
 
+.player-inputs .input-dark {
+  color: #dadada;
+  background: rgba(0, 0, 0, 0.3);
+}
+
 .player-inputs button {
   flex: 1;
   margin-left: 10px;
@@ -217,6 +227,16 @@ li {
   cursor: pointer;
   text-decoration: none;
   max-width: 200px;
+}
+
+.light-btn {
+  color: #000;
+  background: #aaa8a8;
+}
+
+.light-btn:disabled {
+  background: #292929;
+  color: #4a4a4a;
 }
 
 .dark-btn {
