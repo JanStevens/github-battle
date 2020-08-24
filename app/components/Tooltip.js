@@ -23,17 +23,15 @@ const styles = {
   },
 }
 
-const Tooltip = ({ text, children }) => {
-  return (
-    <Hover>
-      {(hovering) => (
-        <div style={styles.container}>
-          {hovering === true && <div style={styles.tooltip}>{text}</div>}
-          {children}
-        </div>
-      )}
-    </Hover>
-  )
-}
+const Tooltip = ({ text, children }) => (
+  <Hover>
+    {(hovering) => (
+      <div style={styles.container}>
+        {hovering === true && <div style={styles.tooltip}>{text}</div>}
+        {children}
+      </div>
+    )}
+  </Hover>
+)
 
 export default React.memo(Tooltip)
