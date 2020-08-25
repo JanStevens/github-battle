@@ -1,14 +1,17 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import ReactDOM from 'react-dom'
+import loadable from '@loadable/component'
 
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
 import './index.css'
-import Popular from './components/Popular'
-import Battle from './components/Battle'
+
 import Nav from './components/Nav'
 import { ThemeProvider } from './contexts/theme'
-import Results from './components/Results'
+
+const Popular = loadable(() => import('./components/Popular'))
+const Battle = loadable(() => import('./components/Battle'))
+const Results = loadable(() => import('./components/Results'))
 
 const App = () => {
   const [theme, setTheme] = useState('light')

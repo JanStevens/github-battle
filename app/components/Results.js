@@ -8,9 +8,15 @@ import {
   FaUser,
   FaCode,
 } from 'react-icons/fa'
-import { Card } from './Card'
-import Loading from './Loading'
-import Tooltip from './Tooltip'
+
+import loadable from '@loadable/component'
+
+const Card = loadable(() => import('./Card'), {
+  resolveComponent: (comp) => comp.Card,
+})
+const Loading = loadable(() => import('./Loading'))
+const Tooltip = loadable(() => import('./Tooltip'))
+
 import { ThemeConsumer } from '../contexts/theme'
 import classNames from 'classnames'
 import queryString from 'query-string'

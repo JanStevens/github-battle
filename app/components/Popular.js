@@ -9,9 +9,13 @@ import {
   FaExclamationTriangle,
 } from 'react-icons/fa'
 import { emojify } from 'react-emojione'
-import { Card } from './Card'
-import Loading from './Loading'
-import Tooltip from './Tooltip'
+import loadable from '@loadable/component'
+
+const Card = loadable(() => import('./Card'), {
+  resolveComponent: (comp) => comp.Card,
+})
+const Loading = loadable(() => import('./Loading'))
+const Tooltip = loadable(() => import('./Tooltip'))
 
 function LanguagesNav({ selected, onUpdateLanguages }) {
   const languages = ['All', 'JavaScript', 'Ruby', 'Java', 'CSS', 'Python', 'Go']
