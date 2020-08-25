@@ -6,7 +6,7 @@ module.exports = {
   entry: './app/index.js',
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'index_bundle.js',
+    filename: '[name].[hash].bundle.js',
     publicPath: '/',
     chunkFilename: '[name].bundle.js',
   },
@@ -23,6 +23,10 @@ module.exports = {
     ],
   },
   mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
+  devtool:
+    process.env.NODE_ENV === 'production'
+      ? false
+      : 'eval-cheap-module-source-map',
   plugins: [
     new HtmlWebpackPlugin({
       template: 'app/index.html',
