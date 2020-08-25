@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import ReactDOM from 'react-dom'
 
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
 import './index.css'
 import Popular from './components/Popular'
@@ -31,9 +31,12 @@ const App = () => {
         <div className={theme}>
           <div className={'container'}>
             <Nav />
-            <Route exact path={'/'} component={Popular} />
-            <Route exact path={'/battle'} component={Battle} />
-            <Route path={'/battle/results'} component={Results} />
+            <Switch>
+              <Route exact path={'/'} component={Popular} />
+              <Route exact path={'/battle'} component={Battle} />
+              <Route path={'/battle/results'} component={Results} />
+              <Route render={() => <h1>404 Not Found</h1>} />
+            </Switch>
           </div>
         </div>
       </ThemeProvider>
