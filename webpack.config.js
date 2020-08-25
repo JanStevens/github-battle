@@ -1,6 +1,7 @@
 const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CopyPlugin = require('copy-webpack-plugin')
+const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
 module.exports = {
   entry: './app/index.js',
@@ -25,13 +26,14 @@ module.exports = {
   mode: process.env.NODE_ENV === 'production' ? 'production' : 'development',
   devtool:
     process.env.NODE_ENV === 'production'
-      ? false
+      ? 'source-map'
       : 'eval-cheap-module-source-map',
   plugins: [
     new HtmlWebpackPlugin({
       template: 'app/index.html',
     }),
     new CopyPlugin({ patterns: [{ from: '_redirects' }] }),
+    new CleanWebpackPlugin(),
   ],
   devServer: {
     historyApiFallback: true,
