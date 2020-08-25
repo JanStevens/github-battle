@@ -5,9 +5,9 @@ import {
   FaTrophy,
   FaTimesCircle,
 } from 'react-icons/fa'
-import Results from './Results'
 import { ThemeConsumer } from '../contexts/theme'
 import classNames from 'classnames'
+import { Link } from 'react-router-dom'
 
 const Instructions = () => {
   return (
@@ -138,7 +138,6 @@ export default class Battle extends React.Component {
   state = {
     playerOne: null,
     playerTwo: null,
-    battle: false,
   }
 
   handleSubmit = (id, player) => {
@@ -153,30 +152,8 @@ export default class Battle extends React.Component {
     })
   }
 
-  handleReset = () => {
-    this.setState({
-      playerOne: null,
-      playerTwo: null,
-      battle: false,
-    })
-  }
-
-  handleBattle = () => {
-    this.setState({ battle: true })
-  }
-
   render() {
-    const { playerOne, playerTwo, battle } = this.state
-
-    if (battle === true) {
-      return (
-        <Results
-          playerOne={playerOne}
-          playerTwo={playerTwo}
-          onReset={this.handleReset}
-        />
-      )
-    }
+    const { playerOne, playerTwo } = this.state
 
     return (
       <ThemeConsumer>
@@ -219,15 +196,18 @@ export default class Battle extends React.Component {
               </div>
 
               {playerOne && playerTwo && (
-                <button
+                <Link
                   className={classNames('btn', 'btn-space', {
                     'light-btn': theme === 'dark',
                     'dark-btn': theme === 'light',
                   })}
-                  onClick={this.handleBattle}
+                  to={{
+                    pathname: '/battle/results',
+                    search: `?playerOne=${playerOne}&playerTwo=${playerTwo}`,
+                  }}
                 >
                   Battle
-                </button>
+                </Link>
               )}
             </div>
           </>

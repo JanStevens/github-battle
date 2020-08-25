@@ -103,7 +103,6 @@ function ReposGrid({ repos }) {
           {
             id,
             name,
-            full_name,
             description,
             owner: { login, avatar_url },
             html_url,
@@ -137,7 +136,7 @@ function ReposGrid({ repos }) {
                       target={'_blank'}
                       rel="noreferrer"
                     >
-                      {full_name}
+                      {name}
                     </a>
                   </Tooltip>
                 </li>

@@ -13,6 +13,8 @@ import Loading from './Loading'
 import Tooltip from './Tooltip'
 import { ThemeConsumer } from '../contexts/theme'
 import classNames from 'classnames'
+import queryString from 'query-string'
+import { Link } from 'react-router-dom'
 
 const PlayerResult = ({ header, profile, score }) => {
   return (
@@ -72,7 +74,9 @@ export default class Results extends React.Component {
   }
 
   componentDidMount() {
-    const { playerOne, playerTwo } = this.props
+    const { playerOne, playerTwo } = queryString.parse(
+      this.props.location.search
+    )
 
     battle([playerOne, playerTwo])
       .then((players) => {
@@ -93,7 +97,6 @@ export default class Results extends React.Component {
 
   render() {
     const { winner, loser, error, loading } = this.state
-    const { onReset } = this.props
 
     if (loading === true) {
       return <Loading text={'Batteling'} />
@@ -120,15 +123,15 @@ export default class Results extends React.Component {
                 profile={loser.profile}
               />
             </div>
-            <button
-              onClick={onReset}
+            <Link
+              to={'/battle'}
               className={classNames('btn', 'btn-space', {
                 'light-btn': theme === 'dark',
                 'dark-btn': theme === 'light',
               })}
             >
               Reset
-            </button>
+            </Link>
           </>
         )}
       </ThemeConsumer>

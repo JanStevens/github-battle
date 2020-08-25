@@ -8,6 +8,7 @@ import Popular from './components/Popular'
 import Battle from './components/Battle'
 import Nav from './components/Nav'
 import { ThemeProvider } from './contexts/theme'
+import Results from './components/Results'
 
 const App = () => {
   const [theme, setTheme] = useState('light')
@@ -31,7 +32,8 @@ const App = () => {
           <div className={'container'}>
             <Nav />
             <Route exact path={'/'} component={Popular} />
-            <Route path={'/battle'} component={Battle} />
+            <Route exact path={'/battle'} component={Battle} />
+            <Route path={'/battle/results'} component={Results} />
           </div>
         </div>
       </ThemeProvider>
