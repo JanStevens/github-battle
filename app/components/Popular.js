@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useReducer, useRef, useState } from 'react'
 import classNames from 'classnames'
 
 import { fetchPopularRepos } from '../utils/api'
@@ -11,15 +11,22 @@ import {
 import { emojify } from 'react-emojione'
 import loadable from '@loadable/component'
 
-const Card = loadable(() => import('./Card'), {
-  resolveComponent: (comp) => comp.Card,
-})
+const Card = loadable(() => import('./Card'))
 const Loading = loadable(() => import('./Loading'))
 const Tooltip = loadable(() => import('./Tooltip'))
 
-function LanguagesNav({ selected, onUpdateLanguages }) {
-  const languages = ['All', 'JavaScript', 'Ruby', 'Java', 'CSS', 'Python', 'Go']
+const languages = [
+  'All',
+  'JavaScript',
+  'Ruby',
+  'Java',
+  'CSS',
+  'Python',
+  'Elixir',
+  'Go',
+]
 
+const LanguagesNav = ({ selected, onUpdateLanguages }) => {
   return (
     <ul className={'flex-center'}>
       {languages.map((language) => (
@@ -38,68 +45,7 @@ function LanguagesNav({ selected, onUpdateLanguages }) {
   )
 }
 
-export default class Popular extends React.Component {
-  state = {
-    selectedLanguage: 'All',
-    repos: {},
-    error: null,
-  }
-
-  componentDidMount() {
-    this.updateLanguage(this.state.selectedLanguage)
-  }
-
-  updateLanguage = (selectedLanguage) => {
-    this.setState({ selectedLanguage, error: null })
-
-    if (!this.state.repos[selectedLanguage]) {
-      fetchPopularRepos(selectedLanguage)
-        .then((data) =>
-          this.setState(({ repos }) => ({
-            repos: {
-              [selectedLanguage]: data,
-              ...repos,
-            },
-            error: null,
-          }))
-        )
-        .catch(() => {
-          console.warn('Error fetching repos: ', this.state.error)
-          this.setState({
-            error: `There was an error fetching the repositories.`,
-          })
-        })
-    }
-  }
-
-  isLoading = () => {
-    const { selectedLanguage, error, repos } = this.state
-    return !repos[selectedLanguage] && error === null
-  }
-
-  render() {
-    const { selectedLanguage, repos, error } = this.state
-
-    return (
-      <>
-        <LanguagesNav
-          selected={selectedLanguage}
-          onUpdateLanguages={this.updateLanguage}
-        />
-
-        {this.isLoading() && <Loading text={'Fetcing Repos'} />}
-
-        {error && <p className={'center-text error'}>{error}</p>}
-
-        {repos[selectedLanguage] && (
-          <ReposGrid repos={repos[selectedLanguage]} />
-        )}
-      </>
-    )
-  }
-}
-
-function ReposGrid({ repos }) {
+const ReposGrid = ({ repos }) => {
   return (
     <div className={'grid space-around'}>
       {repos.map(
@@ -166,3 +112,58 @@ function ReposGrid({ repos }) {
     </div>
   )
 }
+
+const popularReducer = (state, action) => {
+  switch (action.type) {
+    case 'success':
+      return {
+        ...state,
+        [action.selectedLanguage]: action.repos,
+        errors: null,
+      }
+    case 'error':
+      return {
+        ...state,
+        error: action.error.message,
+      }
+
+    default:
+      throw new Error('That action type isnt supported.')
+  }
+}
+
+const Popular = () => {
+  const [selectedLanguage, setSelectedLanguage] = useState('All')
+  const [state, dispatch] = useReducer(popularReducer, { error: null })
+
+  const fetchedLanguages = useRef([])
+
+  useEffect(() => {
+    if (fetchedLanguages.current.includes(selectedLanguage) === false) {
+      fetchedLanguages.current.push(selectedLanguage)
+
+      fetchPopularRepos(selectedLanguage)
+        .then((repos) => dispatch({ type: 'success', selectedLanguage, repos }))
+        .catch((error) => dispatch({ type: 'error', error }))
+    }
+  }, [fetchedLanguages, selectedLanguage])
+
+  const isLoading = () => !state[selectedLanguage] && state.error === null
+
+  return (
+    <>
+      <LanguagesNav
+        selected={selectedLanguage}
+        onUpdateLanguages={setSelectedLanguage}
+      />
+
+      {isLoading() && <Loading text={'Fetching Repos'} />}
+
+      {state.error && <p className={'center-text error'}>{state.error}</p>}
+
+      {state[selectedLanguage] && <ReposGrid repos={state[selectedLanguage]} />}
+    </>
+  )
+}
+
+export default Popular

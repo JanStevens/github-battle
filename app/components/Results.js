@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext, useEffect, useReducer } from 'react'
 import { battle } from '../utils/api'
 import {
   FaCompass,
@@ -11,13 +11,11 @@ import {
 
 import loadable from '@loadable/component'
 
-const Card = loadable(() => import('./Card'), {
-  resolveComponent: (comp) => comp.Card,
-})
+const Card = loadable(() => import('./Card'))
 const Loading = loadable(() => import('./Loading'))
 const Tooltip = loadable(() => import('./Tooltip'))
 
-import { ThemeConsumer } from '../contexts/theme'
+import { ThemeContext } from '../contexts/theme'
 import classNames from 'classnames'
 import queryString from 'query-string'
 import { Link } from 'react-router-dom'
@@ -71,76 +69,80 @@ const PlayerResult = ({ header, profile, score }) => {
   )
 }
 
-export default class Results extends React.Component {
-  state = {
+const battleReducer = (state, action) => {
+  switch (action.type) {
+    case 'success':
+      return {
+        ...state,
+        winner: action.winner,
+        loser: action.loser,
+        error: null,
+        loading: false,
+      }
+    case 'error':
+      return {
+        ...state,
+        error: action.message,
+        loading: false,
+      }
+
+    default:
+      throw new Error('The action type is not supported')
+  }
+}
+
+const Results = ({ location }) => {
+  const theme = useContext(ThemeContext)
+  const { playerOne, playerTwo } = queryString.parse(location.search)
+  const [state, dispatch] = useReducer(battleReducer, {
     winner: null,
     loser: null,
     error: null,
     loading: true,
-  }
+  })
 
-  componentDidMount() {
-    const { playerOne, playerTwo } = queryString.parse(
-      this.props.location.search
-    )
-
+  useEffect(() => {
     battle([playerOne, playerTwo])
-      .then((players) => {
-        this.setState({
-          winner: players[0],
-          loser: players[1],
-          error: null,
-          loading: false,
-        })
-      })
-      .catch(({ message }) => {
-        this.setState({
-          error: message,
-          loading: false,
-        })
-      })
+      .then(([winner, loser]) => dispatch({ type: 'success', winner, loser }))
+      .catch(({ message }) => dispatch({ type: 'error', message }))
+  }, [playerOne, playerTwo])
+
+  const { winner, loser, loading, error } = state
+
+  if (loading === true) {
+    return <Loading text={'Batteling'} />
   }
 
-  render() {
-    const { winner, loser, error, loading } = this.state
-
-    if (loading === true) {
-      return <Loading text={'Batteling'} />
-    }
-
-    if (error) {
-      return <p className={'center-text error'}>{error}</p>
-    }
-
-    return (
-      <ThemeConsumer>
-        {({ theme }) => (
-          <>
-            <div className={'grid space-around container-sm'}>
-              <PlayerResult
-                header={winner.score === loser.score ? 'Tie' : 'Winner'}
-                score={winner.score}
-                profile={winner.profile}
-              />
-
-              <PlayerResult
-                header={winner.score === loser.score ? 'Tie' : 'Loser'}
-                score={loser.score}
-                profile={loser.profile}
-              />
-            </div>
-            <Link
-              to={'/battle'}
-              className={classNames('btn', 'btn-space', {
-                'light-btn': theme === 'dark',
-                'dark-btn': theme === 'light',
-              })}
-            >
-              Reset
-            </Link>
-          </>
-        )}
-      </ThemeConsumer>
-    )
+  if (error) {
+    return <p className={'center-text error'}>{error}</p>
   }
+
+  return (
+    <>
+      <div className={'grid space-around container-sm'}>
+        <PlayerResult
+          header={winner.score === loser.score ? 'Tie' : 'Winner'}
+          score={winner.score}
+          profile={winner.profile}
+        />
+
+        <PlayerResult
+          header={winner.score === loser.score ? 'Tie' : 'Loser'}
+          score={loser.score}
+          profile={loser.profile}
+        />
+      </div>
+      <Link
+        to={'/battle'}
+        className={classNames('btn', 'btn-space', {
+          'light-btn': theme === 'dark',
+          'dark-btn': theme === 'light',
+        })}
+      >
+        Reset
+      </Link>
+    </>
+  )
 }
+
+export default Results

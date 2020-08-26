@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import ReactDOM from 'react-dom'
 import loadable from '@loadable/component'
 
@@ -20,20 +20,12 @@ const App = () => {
     setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'))
   }, [setTheme])
 
-  const themeProviderValue = useMemo(
-    () => ({
-      theme,
-      toggleTheme,
-    }),
-    [theme, toggleTheme]
-  )
-
   return (
     <Router>
-      <ThemeProvider value={themeProviderValue}>
+      <ThemeProvider value={theme}>
         <div className={theme}>
           <div className={'container'}>
-            <Nav />
+            <Nav toggleTheme={toggleTheme} />
             <Switch>
               <Route exact path={'/'} component={Popular} />
               <Route exact path={'/battle'} component={Battle} />
